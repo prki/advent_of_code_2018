@@ -1,3 +1,4 @@
+# Problem definition: https://adventofcode.com/2018/day/4
 # O(n log n) solution due to sort.
 # O(n) solution possible but chronological order makes this far easier
 # to implement and understand. (thus O(n log n) due to sort)

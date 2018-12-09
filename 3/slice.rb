@@ -1,3 +1,5 @@
+# Problem definition: https://adventofcode.com/2018/day/3
+
 def read_input
   ary = []
   File.open('./input.txt', 'r') do |file|
