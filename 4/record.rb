@@ -19,7 +19,7 @@ def guard_sleep_beforemidnight(chrono_inputs)
   # and the hour is not needed (a guard does not fall asleep before 00:00)
   # although this was stated in the problem definition, ebin.
   chrono_inputs.each do |input|
-    return true if input[1].eql?('falls') and input[0].hour == 23
+    return true if input[1].eql?('falls') && input[0].hour == 23
   end
 
   false
@@ -32,24 +32,20 @@ def parse_line(line)
   # year + 500 - done so that the date can be timestamped
   line = line.tr('[', '').tr(']', '').tr('-', ' ').tr(':', ' ').tr('#', '')
   line = line.split
-  year = line[0].to_i
-  month = line[1].to_i
-  day = line[2].to_i
-  hour = line[3].to_i
-  minute = line[4].to_i
+  timestamp = Time.new(line[0].to_i + 500, line[1], line[2], line[3], line[4])
   state = line[5]
   id = line[6].to_i if line[5].eql?('Guard')
 
-  [Time.new(year + 500, month, day, hour, minute), state, id]
+  [timestamp, state, id]
 end
 
 def sort_inputs(inputs)
   chronological_inputs = []
-  
+
   inputs.each do |input|
     chronological_inputs << parse_line(input)
   end
-  
+
   chronological_inputs.sort! { |x, y| x[0] <=> y[0] }
 end
 
@@ -62,13 +58,13 @@ def merge_sleeptimes(hash, guard_id, ary)
   ary.each_with_index do |x, idx|
     ary_new << x + ary2[idx]
   end
-  
+
   hash[guard_id] = ary_new
 end
 
 def add_sleeptime_to_hash(hash, guard_id, falls_minute, wakes_minute)
   ary = Array.new(60) { 0 }
-  ary.each_with_index do |x, idx|
+  ary.each_with_index do |_, idx|
     ary[idx] = 1 if idx.between?(falls_minute, wakes_minute - 1)
   end
 
@@ -89,7 +85,7 @@ def build_hash(chrono_inputs, hash_guards_asleep)
       add_sleeptime_to_hash(hash_guards_asleep, guard_id, falls_minute,
                             wakes_minute)
     end
-  end 
+  end
 
   hash_guards_asleep
 end
@@ -130,8 +126,8 @@ end
 
 inputs = read_input
 chronological_inputs = sort_inputs(inputs)
-#puts chronological_inputs
-#puts guard_sleep_beforemidnight(chronological_inputs)
+# puts chronological_inputs
+# puts guard_sleep_beforemidnight(chronological_inputs)
 hash_guards_asleep = {}
 
 build_hash(chronological_inputs, hash_guards_asleep)
@@ -146,4 +142,4 @@ p('Multiplication:', multiplication)
 
 sleepyboi = most_frequent_sleepyboi(hash_guards_asleep)
 idx = sleepyboi_most_slept_minute(hash_guards_asleep, sleepyboi)
-p(sleepyboi*idx)
+p(sleepyboi * idx)
